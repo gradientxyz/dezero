@@ -8,7 +8,7 @@ from dezero import Variable
 from dezero.core_simple import pow
 
 
-def numerical_diff(f, x, eps=1e-4, *param):
+def numerical_diff(f, x, *param, eps=1e-4):
     x0 = Variable(x.data - eps)
     x1 = Variable(x.data + eps)
     y0 = f(x0, *param)

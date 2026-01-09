@@ -91,6 +91,9 @@ class Variable:
     @property
     def T(self):
         return dezero.functions.transpose(self)
+    
+    def sum(self, axis=None, keepdims=False):
+        return dezero.functions.sum(self, axis, keepdims)
 
     def set_creator(self, func):
         self.creator = func
@@ -300,3 +303,7 @@ def setup_variable():
     Variable.__truediv__ = div
     Variable.__rtruediv__ = rdiv
     Variable.__pow__ = pow
+    Variable.__getitem__ = dezero.functions.get_item
+
+    Variable.matmul = dezero.functions.matmul
+    Variable.dot = dezero.functions.matmul

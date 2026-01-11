@@ -1,7 +1,9 @@
 import numpy as np
 from dezero import utils
+from dezero.core import Variable
 from dezero.core import Function
 from dezero.core import as_variable
+from dezero.core import as_array
 
 
 # =========================================
@@ -383,13 +385,29 @@ class SoftmaxCrossEntropy(Function):
         gy *= 1 / N
         y = softmax(x)
         # convert to one-hot
-        t_onehot = np.eye(x, CLS_NUM, dtype=t.dtype)[t.data]
+        t_onehot = np.eye(CLS_NUM, dtype=t.dtype)[t.data]
         y = (y - t_onehot) * gy
         return y
     
 
 def softmax_cross_entropy(x, t):
     return SoftmaxCrossEntropy()(x, t)
+
+
+
+# =========
+# accuracy
+# =========
+def accuracy(y, t):
+    """
+    [WAR] This function is not differentiable
+    """
+    y, t = as_variable(y), as_variable(t)
+
+    pred = y.data.argmax(axis=1).reshape(t.shape)
+    result = (pred == t.data)
+    acc = result.mean()
+    return Variable(as_array(acc))
 
 
 
